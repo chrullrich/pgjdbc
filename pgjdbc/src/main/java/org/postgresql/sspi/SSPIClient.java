@@ -16,7 +16,7 @@ import org.postgresql.util.PSQLState;
 import com.sun.jna.LastErrorException;
 import com.sun.jna.Platform;
 import com.sun.jna.platform.win32.Sspi;
-import com.sun.jna.platform.win32.Sspi.SecBufferDesc;
+import com.sun.jna.platform.win32.SspiUtil.ManagedSecBufferDesc;
 import com.sun.jna.platform.win32.Win32Exception;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import waffle.windows.auth.IWindowsCredentialsHandle;
@@ -201,7 +201,7 @@ public class SSPIClient implements ISSPIClient {
     /* Read the response token from the server */
     byte[] receivedToken = pgStream.receive(msgLength);
 
-    SecBufferDesc continueToken = new SecBufferDesc(Sspi.SECBUFFER_TOKEN, receivedToken);
+    ManagedSecBufferDesc continueToken = new ManagedSecBufferDesc(Sspi.SECBUFFER_TOKEN, receivedToken);
 
     sspiContext.initialize(sspiContext.getHandle(), continueToken, castNonNull(targetName));
 
