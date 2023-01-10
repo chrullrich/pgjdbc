@@ -272,10 +272,9 @@ Default is 5000ms
 >
 > This behaviour does not exactly match that of libpq, which uses Windows' SSPI libraries for Kerberos (GSSAPI) requests by default when on Windows.
 
-gssapi mode forces JSSE's GSSAPI to be used even if SSPI is available, matching the pre-9.4 behaviour.
+gssapi mode forces JSSE's GSSAPI to be used even if SSPI is available, matching the pre-9.4 behaviour. On non-Windows platforms or where SSPI is unavailable, forcing sspi mode will fail with a PSQLException.
 
-On non-Windows platforms or where SSPI is unavailable, forcing sspi mode will fail with a PSQLException.
-To use SSPI with PgJDBC you must ensure that [the `waffle-jna` library](https://mvnrepository.com/artifact/com.github.waffle/waffle-jna/) and its dependencies are present on the `CLASSPATH` . pgJDBC does **not** bundle `waffle-jna` in the pgJDBC jar.
+To use SSPI with PgJDBC you must ensure that [the `waffle-jna` library](https://mvnrepository.com/artifact/com.github.waffle/waffle-jna/) and its dependencies are present on the `CLASSPATH` . pgJDBC does **not** bundle `waffle-jna` in the pgJDBC jar. pgJDBC versions before 42.6.0 only support `waffle-jna` version 1; later versions add support for `waffle-jna` version 3.
 
 Since: 9.4
 
