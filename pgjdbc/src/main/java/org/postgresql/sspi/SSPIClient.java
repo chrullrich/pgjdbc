@@ -201,7 +201,15 @@ public class SSPIClient implements ISSPIClient {
     /* Read the response token from the server */
     byte[] receivedToken = pgStream.receive(msgLength);
 
-    SecBufferDesc continueToken = new SecBufferDesc(Sspi.SECBUFFER_TOKEN, receivedToken);
+    SecBufferDesc continueToken = null;
+
+    try {
+      Class<?> msbd = Class.forName("com.sun.jna.platform.win32.SspiUtil$ManagedSecBufferDesc");
+      continueToken = (SecBufferDesc) msbd.getConstructor(int.class, byte[].class)
+          .newInstance(Sspi.SECBUFFER_TOKEN, receivedToken);
+    } catch (ReflectiveOperationException ex) {
+      continueToken = new SecBufferDesc(Sspi.SECBUFFER_TOKEN, receivedToken);
+    }
 
     sspiContext.initialize(sspiContext.getHandle(), continueToken, castNonNull(targetName));
 
